@@ -74,6 +74,11 @@ export default {
             FlipPicture()
             .then(x => GetState())
             .then(x => this.state = x)
+        },
+        showPlayers: function(){
+            showPlayers()
+            .then(x => GetState())
+            .then(x => this.state = x)
         }
     }
 }

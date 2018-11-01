@@ -1,8 +1,8 @@
 <template>
   <div id="app" class = "container">
     <div class="display-3">
-      
-      What do you meme?
+        <img alt="Vue logo" src="./assets/logo.png" id="logo">
+        What do you meme?
       </div>
       <Nav />
     <router-view/>

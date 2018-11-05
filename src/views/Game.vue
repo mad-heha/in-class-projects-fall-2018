@@ -1,26 +1,31 @@
 <template>
+<link href="https://use.fontawesome.com/releases/v5.4.2/css/all.css"><
 <div>
     <div class= "alert alert-success">
         Yay we have a game!
     </div>
-
     <div class="row">
         <div class="col-md-4">
             <div class="card" >
-                <div class="card-body">
-                    <h5 class="card-title">Players</h5>
-                    <ul class="list-group list-group-flush">
-                        <li v-for="c in players" class="list-group-item">{{c}}</li>
-                    </ul>
-                </div>
+                <h5 class="card-header">
+                    Players
+                    <a @click.prevent="login" class="btn btn-sm btn-primary" :class="{disabled: playerId() !== null}">+</a>
+                </h5>
+                <ul class="list-group list-group-flush">
+                    <li v-for="p in state.players" :key="p.id"
+                        class="list-group-item">
+                        <img />
+                         <h5>{{p.name}}</h5>
+                         <span class="badge badge-primary badge-pill">{{p.score}}</span>
+                     </li>
+                     
+                </ul>
             </div>
             <div class="card" >
-                <div class="card-body">
-                    <h5 class="card-title">My Captions</h5>
-                    <ul class="list-group list-group-flush">
-                        <li v-for="c in myCaptions" class="list-group-item">{{c}}</li>
-                    </ul>
-                  </div>
+                <h5 class="card-header">Played Captions</h5>
+                <ul class="list-group list-group-flush">
+                    <li v-for="c in state.playedCaptions" :key="c.text" class="list-group-item">{{c}}</li>
+                </ul>
             </div>
         </div>
         <div class="col-md-4">
@@ -44,11 +49,23 @@
 </template>
 
 <style lang="scss">
+    li.list-group-style {
+        display: flex;
+        align-content: center;
+        justify-content: space-between;
+        img {
+            width: 30px; height: 30px; 
+            margin-right: 5px;
+        }
+        h5{
+            flex-grow: 1;
+        }
+    }
 
 </style>
 
 <script>
-import { GetState, FlipPicture, GetMyCaptions, GetPlayers } from '@/services/api_access';
+import { GetState, FlipPicture, GetMyCaptions, Login, playerId } from '@/services/api_access';
 
 export default {
     data: function(){
@@ -56,30 +73,30 @@ export default {
             state: {
                 picture: "",
                 players: [],                
-                playedCaptions = []
+                playedCaptions: []
             },
             myCaptions: [],
+            //playerId: null
         }
     },
     created: function(){
-        GetState()
-        .then(x => this.state = x);
-        GetMyCaptions()
-        .then(x=> this.myCaptions = x);
-        GetPlayers()
-        .then(x=> this.players = x)
+        this.refresh();
     },
     methods: {
-        flipPicture: function(){
-            FlipPicture()
-            .then(x => GetState())
+        refresh(){
+            GetState()
             .then(x => this.state = x)
         },
-        showPlayers: function(){
-            showPlayers()
-            .then(x => GetState())
-            .then(x => this.state = x)
-        }
+        flipPicture: function(){
+            FlipPicture()
+            .then(() => this.refresh())
+        },
+        login: function(){
+            Login(prompt('Enter name'))
+            .then(() => GetMyCaptions().then(x=> this.myCaptions = x) )
+            .then(() => this.refresh())
+        },
+        playerId: ()=> playerId
     }
 }
 </script>

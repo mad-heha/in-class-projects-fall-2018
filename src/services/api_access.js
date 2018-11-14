@@ -7,7 +7,7 @@ export function GetState(){
 export function GetMyCaptions(){
     return myFetch(api_root + `/captions/${playerId}`);
 }
-export function Login(name){
+export function Login(name, fbid, access_token){
     return myFetch(api_root + `/players`, {name: name})
             .then(x=> playerId = x.id);
 }

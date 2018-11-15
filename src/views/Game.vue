@@ -10,7 +10,7 @@
                     <h5 class="card-header">
                         Players
                         <a @click.prevent="login" class="btn btn-sm btn-primary" :class="{disabled: playerId() !== null}">+</a>
-                        <i v-if="playerId()!== null"> (Welcome {{state.players[playerId()].name}})</i>
+                        <i v-if="playerId() !== null">(Welcome {{state.players[playerId()].name}})</i>
                     </h5>
                     <ul class="list-group list-group-flush">
                         <li v-for="p in state.players" :key="p.id"
@@ -46,14 +46,14 @@
                 <h5 class="card-header">Played Captions</h5>
                 <ul class="list-group list-group-flush">
                     <li v-for="c in state.playedCaptions" :key="c.text"
-                        class="list-group-item" :class="{'list-group-item-warning' : c.isChosen}">
+                        class="list-group-item" :class="{ 'list-group-item-warning' : c.isChosen }">
                         {{c.text }}
-                            <a  v-if="isDealer"
-                                @click.prevent="chooseCaption(c)"
-                                class="btn btn-primary btn-sm">Choose</a>
-                            <span class="badge" :class="c.playerName ? 'badge-success' : 'badge-secondary'">
-                                {{c.playerName || 'Hidden'}}
-                            </span>
+                        <a  v-if="isDealer"
+                            @click.prevent="chooseCaption(c)"
+                            class="btn btn-primary btn-sm">Choose</a>
+                        <span class="badge" :class="c.playerName ? 'badge-success' : 'badge-secondary'">
+                            {{c.playerName || 'Hidden'}}
+                        </span>
                     </li>
                 </ul>
             </div>
@@ -80,7 +80,7 @@
 
 <script>
 import * as api from '@/services/api_access';
-import * as api from '@/services/facebook';
+import * as fb from '@/services/facebook';
 let loopTimer = null;
 
 export default {
@@ -109,7 +109,7 @@ export default {
             api.FlipPicture()
         },
         login() {
-            fb.FBLogin()
+            fb.FBLogin();
             //.then(()=> api.GetMyCaptions().then(x=> this.myCaptions = x) )
         },
         submitCaption(c){
